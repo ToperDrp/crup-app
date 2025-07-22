@@ -1,0 +1,102 @@
+[
+  {
+    "id": "SALE001",
+    "date": "2024-07-20",
+    "tableNumber": 8,
+    "customerCount": 6,
+    "buffetType": "Premium",
+    "pricePerPerson": 599,
+    "totalAmount": 3594,
+    "paymentMethod": "Credit Card"
+  },
+  {
+    "id": "SALE002",
+    "date": "2024-07-20",
+    "tableNumber": 2,
+    "customerCount": 2,
+    "buffetType": "Standard",
+    "pricePerPerson": 399,
+    "totalAmount": 798,
+    "paymentMethod": "QR Code"
+  },
+  {
+    "id": "SALE003",
+    "date": "2024-07-20",
+    "tableNumber": 8,
+    "customerCount": 3,
+    "buffetType": "Seafood",
+    "pricePerPerson": 799,
+    "totalAmount": 2397,
+    "paymentMethod": "Cash"
+  },
+  {
+    "id": "SALE004",
+    "date": "2024-07-21",
+    "tableNumber": 1,
+    "customerCount": 2,
+    "buffetType": "Premium",
+    "pricePerPerson": 599,
+    "totalAmount": 1198,
+    "paymentMethod": "QR Code"
+  },
+  {
+    "id": "SALE005",
+    "date": "2024-07-21",
+    "tableNumber": 10,
+    "customerCount": 5,
+    "buffetType": "Standard",
+    "pricePerPerson": 399,
+    "totalAmount": 1995,
+    "paymentMethod": "Credit Card"
+  },
+  {
+    "id": "SALE006",
+    "date": "2024-07-21",
+    "tableNumber": 3,
+    "customerCount": 2,
+    "buffetType": "Standard",
+    "pricePerPerson": 399,
+    "totalAmount": 798,
+    "paymentMethod": "Cash"
+  },
+  {
+    "id": "SALE007",
+    "date": "2024-07-22",
+    "tableNumber": 7,
+    "customerCount": 4,
+    "buffetType": "Seafood",
+    "pricePerPerson": 799,
+    "totalAmount": 3196,
+    "paymentMethod": "Credit Card"
+  },
+  {
+    "id": "SALE008",
+    "date": "2024-07-22",
+    "tableNumber": 4,
+    "customerCount": 1,
+    "buffetType": "Premium",
+    "pricePerPerson": 599,
+    "totalAmount": 599,
+    "paymentMethod": "QR Code"
+  },
+  {
+    "id": "SALE009",
+    "date": "2024-07-23",
+    "tableNumber": 9,
+    "customerCount": 2,
+    "buffetType": "Standard",
+    "pricePerPerson": 399,
+    "totalAmount": 798,
+    "paymentMethod": "Cash"
+  },
+  {
+    "id": "SALE010",
+    "date": "2024-07-23",
+    "tableNumber": 6,
+    "customerCount": 3,
+    "buffetType": "Premium",
+    "pricePerPerson": 599,
+    "totalAmount": 1797,
+    "paymentMethod": "Credit Card"
+  }
+]

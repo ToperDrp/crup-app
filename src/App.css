@@ -1,0 +1,633 @@
+/* Universal Box Sizing */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* General Body and HTML */
+html, body {
+  height: 100%;
+  min-height: 100vh; /* Ensure it takes at least full viewport height */
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #F8F8F8; /* Off-white background */
+  color: #333333; /* Dark grey for primary text */
+  line-height: 1.6;
+  overflow: hidden; /* Prevent body scroll if content overflows */
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  color: #333333;
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 600;
+}
+
+h2 {
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+/* Paragraphs */
+p {
+  margin-bottom: 1rem;
+}
+
+/* Containers and Layout */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* App Layout */
+.app-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden; /* Ensure the app container itself doesn't overflow */
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.page-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+  background-color: #F0F0F0; /* Slightly darker background for login/register pages */
+}
+
+/* Buttons */
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  margin-right: 10px; /* Spacing between buttons */
+}
+
+.btn-primary {
+  background-color: #4A90E2; /* Primary blue */
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #3A7AD2;
+}
+
+.btn-secondary {
+  background-color: #3A7AD2; /* Secondary blue */
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #3A7AD2; /* Secondary blue for hover */
+}
+
+.btn-danger {
+  background-color: #FF6B6B; /* Soft red for danger */
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #FF4C4C;
+}
+
+/* Forms */
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: #666666; /* Medium grey for labels */
+}
+
+.form-input,
+.form-select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #E0E0E0;
+  border-radius: 5px;
+  box-sizing: border-box; /* Include padding in width */
+  font-size: 1rem;
+  color: #333333;
+  background-color: white;
+}
+
+.form-input:focus,
+.form-select:focus {
+  outline: none;
+  border-color: #4A90E2;
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+.form-actions {
+  margin-top: 20px;
+  text-align: right;
+}
+
+/* Modals */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent dark overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+}
+
+/* Crud Table */
+.crud-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  overflow: hidden; /* Ensures rounded corners apply to children */
+}
+
+.crud-table th,
+.crud-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #E0E0E0;
+}
+
+.crud-table th {
+  background-color: #F0F0F0; /* Slightly darker header */
+  font-weight: 600;
+  color: #333333;
+}
+
+.crud-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.crud-table tbody tr:hover {
+  background-color: #FDFDFD;
+}
+
+/* Page Header for Crud */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.add-btn {
+  background-color: #4A90E2;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 1.8rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease;
+}
+
+.add-btn:hover {
+  background-color: #3A7AD2;
+}
+
+/* Login/Register Pages */
+.login-container,
+.register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+  background-color: #F0F0F0; /* Slightly darker background for login/register pages */
+}
+
+.login-form,
+.register-form {
+  background-color: white;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.login-title,
+.register-title {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 30px;
+  color: #333333;
+}
+
+.register-text,
+.login-text {
+  margin-top: 20px;
+  color: #666666;
+}
+
+.register-link,
+.login-link {
+  color: #4A90E2;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.register-link:hover,
+.login-link:hover {
+  text-decoration: underline;
+}
+
+/* Sidebar */
+.sidebar {
+  background-color: #F0F0F0; /* Light grey for sidebar */
+  color: #333333;
+  padding: 20px;
+  flex-shrink: 0;
+  transition: width 0.3s ease;
+  width: 240px; /* Default width */
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Full height */
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+}
+
+.sidebar.collapsed {
+  width: 60px;
+}
+
+.sidebar-title {
+  text-align: center;
+  margin-bottom: 30px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #E0E0E0;
+  font-size: 1.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.sidebar-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1;
+}
+
+.sidebar-menu-item {
+  display: block;
+  color: #333333;
+  text-decoration: none;
+  padding: 12px 15px;
+  border-radius: 5px;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-menu-item:hover {
+  background-color: #E0E0E0;
+}
+
+.sidebar-logout-btn {
+  margin-top: auto;
+  background-color: #FF6B6B;
+  color: white;
+  padding: 12px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: left;
+  font-size: 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: background-color 0.3s ease;
+}
+
+.sidebar-logout-btn:hover {
+  background-color: #FF4C4C;
+}
+
+/* User Navbar */
+.user-navbar {
+  background-color: white;
+  padding: 15px 20px;
+  border-bottom: 1px solid #E0E0E0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #333333;
+  font-weight: 600;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+}
+
+.toggle-sidebar-btn {
+  background-color: #4A90E2;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  font-size: 1.2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.toggle-sidebar-btn:hover {
+  background-color: #3A7AD2;
+}
+
+/* Chatbot Styles */
+.chatbot-page-layout {
+  display: flex;
+  flex: 1;
+  height: 100%;
+  /* position: relative; */ /* Removed as it conflicts with flex layout */
+}
+
+.chatbot-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex: 1; /* Allow chatbot container to grow and shrink */
+  
+  margin: 0 auto; /* Center the chatbot */
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: max-width 0.3s ease-in-out; /* Smooth transition for width change */
+}
+
+.chatbot-container.settings-open {
+  /* Shrink when settings are open */
+}
+
+.chatbot-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background-color: #F0F0F0;
+  border-bottom: 1px solid #E0E0E0;
+}
+
+.chatbot-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #333333;
+  margin: 0;
+}
+
+.chatbot-settings-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #666666;
+  transition: color 0.3s ease;
+}
+
+.chatbot-settings-btn:hover {
+  color: #333333;
+}
+
+.chatbot-messages {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chatbot-message {
+  padding: 10px 15px;
+  border-radius: 15px;
+  max-width: 80%;
+  word-wrap: break-word;
+}
+
+.chatbot-message.user {
+  align-self: flex-end;
+  background-color: #4A90E2; /* Primary blue for user messages */
+  color: white;
+  border-bottom-right-radius: 2px; /* Sharpen corner for user */
+}
+
+.chatbot-message.bot {
+  align-self: flex-start;
+  background-color: #E0E0E0; /* Light grey for bot messages */
+  color: #333333;
+  border-bottom-left-radius: 2px; /* Sharpen corner for bot */
+}
+
+.chatbot-input-area {
+  display: flex;
+  padding: 15px 20px;
+  border-top: 1px solid #E0E0E0;
+  background-color: #F0F0F0;
+}
+
+.chatbot-input {
+  flex: 1;
+  padding: 10px 15px;
+  border: 1px solid #CCCCCC;
+  border-radius: 20px;
+  font-size: 1rem;
+  margin-right: 10px;
+}
+
+.chatbot-input:focus {
+  outline: none;
+  border-color: #4A90E2;
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+.chatbot-send-btn {
+  background-color: #4A90E2;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.chatbot-send-btn:hover {
+  background-color: #3A7AD2;
+}
+
+/* Chatbot Settings Card */
+.chatbot-settings-card {
+  width: 0; /* Start with 0 width */
+  height: 100%;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Hide content when collapsed */
+  transition: width 0.3s ease-in-out; /* Smooth transition for width change */
+}
+
+.chatbot-settings-card.open {
+  width: 300px; /* Expand to 300px when open */
+  margin-left: 20px; /* Add spacing to the left */
+}
+
+.chatbot-settings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background-color: #F0F0F0;
+  border-bottom: 1px solid #E0E0E0;
+}
+
+.chatbot-settings-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #333333;
+}
+
+.chatbot-settings-close-btn {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+  color: #666666;
+  transition: color 0.3s ease;
+}
+
+.chatbot-settings-close-btn:hover {
+  color: #333333;
+}
+
+.chatbot-settings-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.chatbot-settings-content .form-group {
+  margin-bottom: 20px;
+}
+
+.chatbot-settings-content .form-label {
+  font-weight: 600;
+  color: #333333;
+}
+
+.chatbot-settings-content .form-input,
+.chatbot-settings-content .form-select,
+.chatbot-settings-content textarea {
+  border: 1px solid #CCCCCC;
+  border-radius: 5px;
+  padding: 8px 10px;
+  width: 100%;
+  font-size: 0.95rem;
+}
+
+.chatbot-settings-content .form-input:focus,
+.chatbot-settings-content .form-select:focus,
+.chatbot-settings-content textarea:focus {
+  border-color: #4A90E2;
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+.chatbot-settings-content .btn-primary {
+  width: 100%;
+  margin-top: 10px;
+}
+
+/* Sales Table Specific Styles for Chatbot */
+.sales-table-container {
+  max-width: 100%;
+  overflow-x: auto; /* Enable horizontal scrolling for small screens */
+  margin-top: 10px;
+  border: 1px solid #E0E0E0;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.sales-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  font-size: 0.9rem;
+}
+
+.sales-table th,
+.sales-table td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid #F0F0F0;
+}
+
+.sales-table th {
+  background-color: #F8F8F8;
+  font-weight: 600;
+  color: #555555;
+  white-space: nowrap; /* Prevent header text from wrapping */
+}
+
+.sales-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.sales-table tbody tr:nth-child(even) {
+  background-color: #FDFDFD; /* Slightly different background for even rows */
+}
+
+.sales-table tbody tr:hover {
+  background-color: #EBF5FF; /* Light blue on hover */
+}
