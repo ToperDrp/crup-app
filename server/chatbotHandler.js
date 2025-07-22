@@ -1,7 +1,8 @@
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 
 // --- Gemini API Configuration ---
-const GEMINI_API_KEY = 'AIzaSyCimGiXyiN_lYFBFz3N_3-5zGS-VmQJsAU'; // <<< REPLACE WITH YOUR ACTUAL GEMINI API KEY
+// Gemini API Configuration
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_API_HOST = 'generativelanguage.googleapis.com';
 const GEMINI_API_PATH = '/v1beta/models/gemini-2.0-flash:generateContent';
 
