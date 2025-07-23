@@ -3,7 +3,7 @@ require('dotenv').config({ path: '../.env' });
 
 const express = require('express');
 const path = require('path');
-const mysql = require('mysql2');
+const { Pool } = require('pg');
 const cors = require('cors');
 const bcrypt = require('bcryptjs'); // Import bcryptjs
 
@@ -11,11 +11,13 @@ const bcrypt = require('bcryptjs'); // Import bcryptjs
 const app = express();
 const port = 3001;
 
-
+app.set('trust proxy', true);
+app.options('*', cors()); 
 
 // Middleware to parse JSON bodies
 app.use(express.json());
 app.use(cors());
+
 
 // API endpoint for user registration
 app.post('/api/register', async (req, res) => {
@@ -27,8 +29,8 @@ app.post('/api/register', async (req, res) => {
 
   try {
     // Check if user already exists
-    const [existingUsers] = await pool.promise().query('SELECT id FROM users WHERE username = ?', [username]);
-    if (existingUsers.length > 0) {
+    const existingUsers = await pool.query('SELECT id FROM users WHERE username = $1', [username]);
+    if (existingUsers.rows.length > 0) {
       return res.status(409).json({ message: 'Username already exists' });
     }
 
@@ -36,8 +38,8 @@ app.post('/api/register', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10); // 10 salt rounds
 
     // Insert new user into database
-    const [result] = await pool.promise().query('INSERT INTO users (username, password) VALUES (?, ?)', [username, hashedPassword]);
-    res.status(201).json({ message: 'User registered successfully', userId: result.insertId });
+    const result = await pool.query('INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id', [username, hashedPassword]);
+    res.status(201).json({ message: 'User registered successfully', userId: result.rows[0].id });
   } catch (error) {
     console.error('Error during registration:', error);
     res.status(500).json({ message: 'Internal server error' });
@@ -57,14 +59,14 @@ app.post('/api/login', async (req, res) => {
 
   try {
     // Find user by username
-    const [users] = await pool.promise().query('SELECT id, username, password FROM users WHERE username = ?', [username]);
+    const users = await pool.query('SELECT id, username, password FROM users WHERE username = $1', [username]);
 
-    if (users.length === 0) {
+    if (users.rows.length === 0) {
       console.log('User not found in database.');
       return res.status(401).json({ message: 'Invalid username or password' });
     }
 
-    const user = users[0];
+    const user = users.rows[0];
 
     console.log('User found in database:', user.username);
     console.log('Hashed password from DB:', user.password);
@@ -85,14 +87,12 @@ app.post('/api/login', async (req, res) => {
 });
 
 // MySQL Connection Pool
-const pool = mysql.createPool({
-  host: process.env.DB_HOST,
+const pool = new Pool({
   user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
+  host: process.env.DB_HOST,
   database: process.env.DB_DATABASE,
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT || 5432, // Default PostgreSQL port
 });
 
 // Serve static files from the React app
@@ -106,18 +106,17 @@ app.get('/api/sales', (req, res) => {
   const params = [];
 
   if (startDate && endDate) {
-    // Modify the query to correctly handle the date range for DATETIME columns
-    query += ' WHERE sale_date >= ? AND sale_date < DATE_ADD(?, INTERVAL 1 DAY)';
+    query += ' WHERE sale_date >= $1 AND sale_date < ($2::date + INTERVAL \'1 day\')';
     params.push(startDate, endDate);
   }
 
-  pool.query(query, params, (err, results) => {
+  pool.query(query, params, (err, result) => {
     if (err) {
       console.error('Error fetching sales data:', err);
       return res.status(500).send('Error fetching sales data');
     }
     // Format sale_date to ISO string for consistency with frontend Date object
-    const formattedResults = results.map(sale => ({
+    const formattedResults = result.rows.map(sale => ({
       id: sale.id,
       date: new Date(sale.sale_date).toISOString().split('T')[0], // Format to YYYY-MM-DD
       tableNumber: sale.table_number,
@@ -136,14 +135,14 @@ app.post('/api/sales', (req, res) => {
   const { date, tableNumber, customerCount, buffetType, pricePerPerson, paymentMethod, totalAmount } = req.body;
   const sale_date = new Date(date); // Convert date string to Date object
 
-  const query = 'INSERT INTO sales (sale_date, table_number, customer_count, buffet_type, price_per_person, payment_method, total_amount) VALUES (?, ?, ?, ?, ?, ?, ?)';
+  const query = 'INSERT INTO sales (sale_date, table_number, customer_count, buffet_type, price_per_person, payment_method, total_amount) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id';
   pool.query(query, [sale_date, tableNumber, customerCount, buffetType, pricePerPerson, paymentMethod, totalAmount], (err, result) => {
     if (err) {
       console.error('Error inserting new sale:', err);
       return res.status(500).send('Error adding new sale');
     }
     // Respond with the newly created sale including its ID from the database
-    res.status(201).json({ id: result.insertId, ...req.body });
+    res.status(201).json({ id: result.rows[0].id, ...req.body });
   });
 });
 
@@ -153,13 +152,13 @@ app.put('/api/sales/:id', (req, res) => {
   const { date, tableNumber, customerCount, buffetType, pricePerPerson, paymentMethod, totalAmount } = req.body;
   const sale_date = new Date(date); // Convert date string to Date object
 
-  const query = 'UPDATE sales SET sale_date = ?, table_number = ?, customer_count = ?, buffet_type = ?, price_per_person = ?, payment_method = ?, total_amount = ? WHERE id = ?';
+  const query = 'UPDATE sales SET sale_date = $1, table_number = $2, customer_count = $3, buffet_type = $4, price_per_person = $5, payment_method = $6, total_amount = $7 WHERE id = $8';
   pool.query(query, [sale_date, tableNumber, customerCount, buffetType, pricePerPerson, paymentMethod, totalAmount, id], (err, result) => {
     if (err) {
       console.error('Error updating sale:', err);
       return res.status(500).send('Error updating sale');
     }
-    if (result.affectedRows === 0) {
+    if (result.rowCount === 0) {
       return res.status(404).send('Sale not found');
     }
     res.json({ id, ...req.body });
@@ -170,13 +169,13 @@ app.put('/api/sales/:id', (req, res) => {
 app.delete('/api/sales/:id', (req, res) => {
   const { id } = req.params;
 
-  const query = 'DELETE FROM sales WHERE id = ?';
+  const query = 'DELETE FROM sales WHERE id = $1';
   pool.query(query, [id], (err, result) => {
     if (err) {
       console.error('Error deleting sale:', err);
       return res.status(500).send('Error deleting sale');
     }
-    if (result.affectedRows === 0) {
+    if (result.rowCount === 0) {
       return res.status(404).send('Sale not found');
     }
     res.status(204).send(); // No Content
@@ -195,12 +194,7 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../dist/index.html'));
 });
 
-// Export the app for Vercel
-module.exports = app;
-
-// Only listen if not in a Vercel environment (i.e., local development)
-if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL_ENV) {
-  app.listen(port, () => {
-    console.log(`Server listening at http://localhost:${port}`);
-  });
-}
+// Start the server
+app.listen(port, '0.0.0.0', () => {
+  console.log(`Server listening on port ${port}`);
+});
